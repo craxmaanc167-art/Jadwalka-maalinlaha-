@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="so">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#14b8a6">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Jadwalkayga">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Jadwalkayga Nolosha</title>
+<style>
+:root{
+  --bg:#0f172a;--card:#1e293b;--card2:#273449;--text:#e2e8f0;--muted:#94a3b8;
+  --primary:#14b8a6;--primary2:#0d9488;--red:#ef4444;--redbg:#3b1219;--green:#22c55e;--amber:#f59e0b;--border:#334155;
+}
+*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{background:var(--bg);color:var(--text);min-height:100vh}
+.app{display:flex;min-height:100vh}
+nav{width:230px;background:var(--card);padding:18px 12px;position:sticky;top:0;height:100vh;overflow:auto;border-right:1px solid var(--border)}
+nav h1{font-size:18px;margin:4px 10px 16px;color:var(--primary)}
+nav button{display:flex;align-items:center;gap:10px;width:100%;padding:11px 12px;margin-bottom:4px;background:none;border:none;color:var(--muted);font-size:15px;border-radius:10px;cursor:pointer;text-align:left}
+nav button:hover{background:var(--card2);color:var(--text)}
+nav button.active{background:var(--primary);color:#04201d;font-weight:700}
+main{flex:1;padding:22px;max-width:960px;margin:0 auto;width:100%;padding-bottom:90px}
+.top{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:18px}
+.top h2{font-size:22px}
+.datebar{display:flex;gap:6px;align-items:center}
+input,select,textarea{background:var(--bg);border:1px solid var(--border);color:var(--text);padding:10px 12px;border-radius:10px;font-size:15px;outline:none;width:100%}
+input:focus,select:focus,textarea:focus{border-color:var(--primary)}
+textarea{min-height:130px;resize:vertical;line-height:1.5}
+.datebar input{width:auto}
+.btn{background:var(--primary);color:#04201d;border:none;padding:10px 16px;border-radius:10px;font-weight:700;font-size:15px;cursor:pointer;white-space:nowrap}
+.btn:hover{background:var(--primary2)}
+.btn.sec{background:var(--card2);color:var(--text)}
+.btn.sm{padding:6px 10px;font-size:13px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:16px}
+.card h3{font-size:16px;margin-bottom:12px}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.row>*{flex:1;min-width:110px}
+.row>.btn{flex:0 0 auto}
+.item{display:flex;align-items:center;gap:10px;padding:11px 12px;background:var(--card2);border-radius:10px;margin-bottom:8px;border:1px solid transparent}
+.item .t{flex:1;word-break:break-word}
+.item.done .t{text-decoration:line-through;color:var(--muted)}
+.item.overdue{background:var(--redbg);border-color:var(--red)}
+.item.overdue .t,.item.overdue .time{color:#fca5a5}
+.item input[type=checkbox]{width:22px;height:22px;accent-color:var(--green);flex:0 0 auto;cursor:pointer}
+.time{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums;min-width:48px}
+.badge{font-size:11px;background:var(--red);color:#fff;padding:3px 8px;border-radius:20px;font-weight:700}
+.x{background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;padding:0 4px}
+.x:hover{color:var(--red)}
+.progress{height:10px;background:var(--card2);border-radius:10px;overflow:hidden;margin-top:8px}
+.progress div{height:100%;background:var(--green);transition:width .3s}
+.muted{color:var(--muted);font-size:14px}
+.empty{color:var(--muted);text-align:center;padding:18px;font-size:14px}
+.grid7{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.day{background:var(--card2);border-radius:10px;padding:8px;min-height:90px;cursor:pointer;border:1px solid transparent;font-size:12px}
+.day:hover{border-color:var(--primary)}
+.day.today{border-color:var(--primary);background:#0f3b37}
+.day .n{font-weight:700;font-size:14px;margin-bottom:4px}
+.day .tk{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px;color:var(--muted)}
+.day .tk.ov{color:#fca5a5}
+.day .tk.dn{text-decoration:line-through;opacity:.6}
+.head7{text-align:center;color:var(--muted);font-size:12px;padding:4px 0}
+.week{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;text-align:center}
+.stat b{display:block;font-size:20px;margin-top:4px}
+.in{color:var(--green)}.out{color:var(--red)}
+.prayer{display:flex;align-items:center;gap:10px;padding:12px;background:var(--card2);border-radius:10px;margin-bottom:8px}
+.prayer input{width:22px;height:22px;accent-color:var(--green)}
+.prayer.on{border:1px solid var(--green)}
+.old{border-left:3px solid var(--primary);padding:8px 12px;margin-bottom:8px;background:var(--card2);border-radius:0 10px 10px 0}
+.old small{color:var(--muted);display:block;margin-bottom:4px}
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--primary);color:#04201d;padding:10px 18px;border-radius:30px;font-weight:700;opacity:0;transition:.3s;pointer-events:none;z-index:50}
+.toast.show{opacity:1}
+#lock{display:none;position:fixed;inset:0;background:var(--bg);z-index:100;align-items:center;justify-content:center}
+.lockbox{text-align:center;width:300px;max-width:90vw}
+.lockbox h2{margin:8px 0 18px;font-size:18px}
+.dots{display:flex;gap:14px;justify-content:center;margin-bottom:22px}
+.dots i{width:16px;height:16px;border-radius:50%;border:2px solid var(--primary)}
+.dots i.on{background:var(--primary)}
+.pad{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.pad button{height:64px;border-radius:50%;border:none;background:var(--card2);color:var(--text);font-size:24px;cursor:pointer}
+.pad button:active{background:var(--primary);color:#04201d}
+.av{width:38px;height:38px;border-radius:50%;vertical-align:middle;margin-right:8px}
+@media(max-width:760px){
+  .app{flex-direction:column}
+  nav{position:fixed;bottom:0;left:0;right:0;top:auto;width:100%;height:auto;display:flex;overflow-x:auto;padding:6px;z-index:20;border-right:none;border-top:1px solid var(--border)}
+  nav h1{display:none}
+  nav button{flex-direction:column;gap:2px;font-size:11px;padding:7px 10px;margin:0 2px;width:auto;min-width:68px;text-align:center}
+  main{padding:14px;padding-bottom:90px}
+  .day{min-height:60px;padding:5px;font-size:10px}
+  .day .tk{display:none}
+  .day .cnt{display:block}
+}
+.day .cnt{display:none;color:var(--primary);font-weight:700}
+</style>
+</head>
+<body>
+<div class="app">
+  <nav id="nav"></nav>
+  <main id="view"></main>
+</div>
+<div id="lock"></div>
+<div class="toast" id="toast">Waa la keydiyay ✓</div>
+
+<script>
+/* ========= DATA ========= */
+const $ = s => document.querySelector(s);
+const KEY = 'jadwalkayga_v1', USERKEY = 'jv_user', SETKEY = 'jv_settings';
+// Gmail: geli Google Client ID-gaaga halkan (eeg Dejinta ⚙️ si aad u ogaato sida loo helo)
+const GOOGLE_CLIENT_ID = '';
+const EMPTY = () => ({tasks:[],money:[],learn:[],mistakes:[],dua:{},diin:{},study:[]});
+let user = JSON.parse(localStorage.getItem(USERKEY) || 'null');
+let settings = Object.assign({pin:null,notif:false,lead:10}, JSON.parse(localStorage.getItem(SETKEY) || '{}'));
+const dbKey = () => user ? KEY + ':' + user.email : KEY;
+const loadDB = () => Object.assign(EMPTY(), JSON.parse(localStorage.getItem(dbKey()) || 'null') || {});
+let db = loadDB();
+const save = () => localStorage.setItem(dbKey(), JSON.stringify(db));
+const saveSet = () => localStorage.setItem(SETKEY, JSON.stringify(settings));
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,6);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pad = n => String(n).padStart(2,'0');
+const ymd = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const parse = s => { const [y,m,d] = s.split('-').map(Number); return new Date(y,m-1,d); };
+const todayStr = () => ymd(new Date());
+const DAYS = ['Sabti','Axad','Isniin','Talaado','Arbaco','Khamiis','Jimce']; // Sabti = 0
+const dayIdx = d => (d.getDay()+1) % 7;
+const MONTHS = ['Janaayo','Febraayo','Maarso','Abriil','Maajo','Juun','Luuliyo','Ogosto','Sebtembar','Oktoobar','Nofembar','Desembar'];
+const money = n => '$' + Number(n).toFixed(2);
+function toast(t='Waa la keydiyay ✓'){const e=$('#toast');e.textContent=t;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),1400)}
+
+let sel = todayStr();      // taariikhda la doortay
+let page = 'maanta';
+let monthView = new Date(); monthView.setDate(1);
+
+const PAGES = [
+  ['maanta','📋','Maanta'],
+  ['usbuuc','📅','Usbuuc'],
+  ['bil','🗓️','Bil'],
+  ['diin','🕌','Diin'],
+  ['dhaqaale','💰','Dhaqaale'],
+  ['waxbarasho','📚','Waxbarasho'],
+  ['bartay','💡','Wax Bartay'],
+  ['qalad','⚠️','Qaladaad'],
+  ['alle','🤲','Alle la hadal'],
+  ['ajaj','⚙️','Dejinta']
+];
+
+/* ========= HELPERS ========= */
+function isOverdue(t){
+  if(t.done) return false;
+  const now = new Date();
+  if(!t.time) return t.date < todayStr();
+  return new Date(`${t.date}T${t.time}`) < now;
+}
+function dateBar(){
+  return `<div class="datebar">
+    <button class="btn sec sm" onclick="shift(-1)">◀</button>
+    <input type="date" value="${sel}" onchange="sel=this.value||todayStr();render()">
+    <button class="btn sec sm" onclick="shift(1)">▶</button>
+    <button class="btn sec sm" onclick="sel=todayStr();render()">Maanta</button>
+  </div>`;
+}
+function shift(n){const d=parse(sel);d.setDate(d.getDate()+n);sel=ymd(d);render()}
+function niceDate(s){const d=parse(s);return `${DAYS[dayIdx(d)]}, ${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`}
+function go(p,date){page=p;if(date)sel=date;render()}
+
+/* ========= NAV ========= */
+function renderNav(){
+  $('#nav').innerHTML = '<h1>🌙 Jadwalkayga' + (user ? `<small class="muted" style="display:block;font-size:11px;font-weight:400">${esc(user.email)}</small>` : '') + '</h1>' + PAGES.map(([id,ic,n]) =>
+    `<button class="${page===id?'active':''}" onclick="go('${id}')"><span>${ic}</span>${n}</button>`).join('');
+}
+
+/* ========= MAANTA ========= */
+function taskItem(t, showDate){
+  const ov = isOverdue(t);
+  return `<div class="item ${t.done?'done':''} ${ov?'overdue':''}">
+    <input type="checkbox" ${t.done?'checked':''} onchange="toggleTask('${t.id}')">
+    <span class="time">${t.time||'—'}</span>
+    <span class="t">${showDate?`<small class="muted">${t.date} · </small>`:''}${esc(t.text)}</span>
+    ${ov?'<span class="badge">Waqtigii waa dhacay</span>':''}
+    <button class="x" onclick="delTask('${t.id}')">×</button>
+  </div>`;
+}
+function viewMaanta(){
+  const list = db.tasks.filter(t=>t.date===sel).sort((a,b)=>(a.time||'99:99').localeCompare(b.time||'99:99'));
+  const done = list.filter(t=>t.done).length;
+  const pct = list.length ? Math.round(done/list.length*100) : 0;
+  const late = list.filter(isOverdue).length;
+  const overdueOld = db.tasks.filter(t=>t.date<sel && isOverdue(t)).sort((a,b)=>a.date.localeCompare(b.date));
+  return `
+  <div class="top"><h2>📋 ${niceDate(sel)}</h2>${dateBar()}</div>
+  <div class="card">
+    <h3>➕ Ku dar shaqo cusub</h3>
+    <div class="row">
+      <input id="tText" placeholder="Maxaan qabanayaa?" onkeydown="if(event.key==='Enter')addTask()" style="flex:3">
+      <input id="tTime" type="time">
+      <button class="btn" onclick="addTask()">Ku dar</button>
+    </div>
+    <div class="muted">Dhamaystiran: ${done}/${list.length} (${pct}%) ${late?` · <span style="color:#fca5a5">${late} waqtigoodii waa dhacay</span>`:''}</div>
+    <div class="progress"><div style="width:${pct}%"></div></div>
+  </div>
+  <div class="card">
+    <h3>Shaqooyinka maanta</h3>
+    ${list.length ? list.map(t=>taskItem(t)).join('') : '<div class="empty">Wali shaqo lagama qorin maalintan.</div>'}
+  </div>
+  ${overdueOld.length?`<div class="card"><h3 style="color:#fca5a5">🔴 Shaqooyin hore oo aan la qaban</h3>${overdueOld.map(t=>taskItem(t,true)).join('')}</div>`:''}`;
+}
+function addTask(){
+  const text = $('#tText').value.trim(); if(!text) return $('#tText').focus();
+  db.tasks.push({id:uid(),text,date:sel,time:$('#tTime').value,done:false});
+  save();render();
+}
+function toggleTask(id){const t=db.tasks.find(x=>x.id===id);t.done=!t.done;save();render()}
+function delTask(id){db.tasks=db.tasks.filter(x=>x.id!==id);save();render()}
+
+/* ========= USBUUC ========= */
+function viewUsbuuc(){
+  const d = parse(sel); d.setDate(d.getDate()-dayIdx(d));
+  let html = '';
+  for(let i=0;i<7;i++){
+    const ds = ymd(d);
+    const list = db.tasks.filter(t=>t.date===ds).sort((a,b)=>(a.time||'99').localeCompare(b.time||'99'));
+    html += `<div class="day ${ds===todayStr()?'today':''}" onclick="go('maanta','${ds}')">
+      <div class="n">${DAYS[i]} ${d.getDate()}</div>
+      ${list.length?list.map(t=>`<span class="tk ${t.done?'dn':''} ${isOverdue(t)?'ov':''}">${t.done?'✅':isOverdue(t)?'🔴':'⬜'} ${t.time||''} ${esc(t.text)}</span>`).join(''):'<span class="muted">—</span>'}
+    </div>`;
+    d.setDate(d.getDate()+1);
+  }
+  const s = parse(sel); s.setDate(s.getDate()-dayIdx(s));
+  const e = new Date(s); e.setDate(e.getDate()+6);
+  const all = db.tasks.filter(t=>t.date>=ymd(s)&&t.date<=ymd(e));
+  const dn = all.filter(t=>t.done).length;
+  return `
+  <div class="top"><h2>📅 Usbuuca</h2>
+    <div class="datebar"><button class="btn sec sm" onclick="shift(-7)">◀ Usbuuc</button>
+    <button class="btn sec sm" onclick="sel=todayStr();render()">Usbuucan</button>
+    <button class="btn sec sm" onclick="shift(7)">Usbuuc ▶</button></div></div>
+  <p class="muted" style="margin-bottom:12px">${s.getDate()} ${MONTHS[s.getMonth()]} – ${e.getDate()} ${MONTHS[e.getMonth()]} · Dhammaystiran: ${dn}/${all.length}</p>
+  <div class="week">${html}</div>`;
+}
+
+/* ========= BIL ========= */
+function viewBil(){
+  const y = monthView.getFullYear(), m = monthView.getMonth();
+  const first = new Date(y,m,1), offset = dayIdx(first), days = new Date(y,m+1,0).getDate();
+  let cells = DAYS.map(d=>`<div class="head7">${d.slice(0,3)}</div>`).join('');
+  for(let i=0;i<offset;i++) cells += '<div></div>';
+  for(let d=1;d<=days;d++){
+    const ds = `${y}-${pad(m+1)}-${pad(d)}`;
+    const list = db.tasks.filter(t=>t.date===ds);
+    cells += `<div class="day ${ds===todayStr()?'today':''}" onclick="go('maanta','${ds}')">
+      <div class="n">${d}</div>
+      <span class="cnt">${list.length?list.length+' 📌':''}</span>
+      ${list.slice(0,3).map(t=>`<span class="tk ${t.done?'dn':''} ${isOverdue(t)?'ov':''}">${t.done?'✅':isOverdue(t)?'🔴':'⬜'} ${esc(t.text)}</span>`).join('')}
+      ${list.length>3?`<span class="tk">+${list.length-3} kale</span>`:''}
+    </div>`;
+  }
+  const mt = db.tasks.filter(t=>t.date.startsWith(`${y}-${pad(m+1)}`));
+  return `
+  <div class="top"><h2>🗓️ ${MONTHS[m]} ${y}</h2>
+    <div class="datebar"><button class="btn sec sm" onclick="monthView.setMonth(monthView.getMonth()-1);render()">◀</button>
+    <button class="btn sec sm" onclick="monthView=new Date();monthView.setDate(1);render()">Bilkan</button>
+    <button class="btn sec sm" onclick="monthView.setMonth(monthView.getMonth()+1);render()">▶</button></div></div>
+  <p class="muted" style="margin-bottom:12px">Wadarta shaqooyinka: ${mt.length} · La dhammeeyay: ${mt.filter(t=>t.done).length} · Waqtigoodii dhacay: ${mt.filter(isOverdue).length}</p>
+  <div class="grid7">${cells}</div>`;
+}
+
+/* ========= DIIN ========= */
+const PRAYERS = [['fajr','Subax (Fajr)'],['dhuhr','Duhur'],['asr','Casar'],['maghrib','Maqrib'],['isha','Cisha']];
+function dayDiin(){return db.diin[sel] || (db.diin[sel]={prayers:{},quran:'',dhikr:'',note:''})}
+function viewDiin(){
+  const d = dayDiin();
+  const n = PRAYERS.filter(([k])=>d.prayers[k]).length;
+  return `
+  <div class="top"><h2>🕌 Diinta</h2>${dateBar()}</div>
+  <p class="muted" style="margin-bottom:12px">${niceDate(sel)}</p>
+  <div class="card"><h3>Salaadaha maanta (${n}/5)</h3>
+    ${PRAYERS.map(([k,l])=>`<label class="prayer ${d.prayers[k]?'on':''}">
+      <input type="checkbox" ${d.prayers[k]?'checked':''} onchange="dayDiin().prayers['${k}']=this.checked;save();render()">
+      <span>${l}</span></label>`).join('')}
+    <div class="progress"><div style="width:${n*20}%"></div></div>
+  </div>
+  <div class="card"><h3>📖 Quraan / Kutubta</h3>
+    <input value="${esc(d.quran)}" placeholder="Tusaale: Suuradda Baqarah, 2 bog" oninput="dayDiin().quran=this.value;save()"></div>
+  <div class="card"><h3>📿 Axzaab / Dhikr / Sunnooyin</h3>
+    <textarea placeholder="Subxaanallaah, Alxamdulillaah, sunnada Duxa, soon..." oninput="dayDiin().dhikr=this.value;save()">${esc(d.dhikr)}</textarea></div>
+  <div class="card"><h3>📝 Xusuus diineed</h3>
+    <textarea placeholder="Cilmi, xadiis, ayad aan maanta bartay..." oninput="dayDiin().note=this.value;save()">${esc(d.note)}</textarea></div>`;
+}
+
+/* ========= DHAQAALE ========= */
+function viewDhaqaale(){
+  const ym = sel.slice(0,7);
+  const list = db.money.filter(x=>x.date.startsWith(ym)).sort((a,b)=>b.date.localeCompare(a.date));
+  const inc = list.filter(x=>x.type==='in').reduce((a,x)=>a+x.amt,0);
+  const exp = list.filter(x=>x.type==='out').reduce((a,x)=>a+x.amt,0);
+  const [y,m] = ym.split('-');
+  return `
+  <div class="top"><h2>💰 Dhaqaalaha</h2>${dateBar()}</div>
+  <p class="muted" style="margin-bottom:12px">Bisha: ${MONTHS[m-1]} ${y}</p>
+  <div class="stats">
+    <div class="stat">Dakhli<b class="in">${money(inc)}</b></div>
+    <div class="stat">Kharash<b class="out">${money(exp)}</b></div>
+    <div class="stat">Haraaga<b style="color:${inc-exp>=0?'var(--green)':'var(--red)'}">${money(inc-exp)}</b></div>
+  </div>
+  <div class="card"><h3>➕ Ku dar dhaqdhaqaaq</h3>
+    <div class="row">
+      <select id="mType"><option value="out">Kharash (-)</option><option value="in">Dakhli (+)</option></select>
+      <input id="mAmt" type="number" min="0" step="0.01" placeholder="Qadarka $">
+      <input id="mNote" placeholder="Maxay ahayd? (cunto, kaar...)" style="flex:2">
+      <button class="btn" onclick="addMoney()">Ku dar</button>
+    </div>
+  </div>
+  <div class="card"><h3>Liiska bisha</h3>
+    ${list.length?list.map(x=>`<div class="item">
+      <span class="time">${x.date.slice(5)}</span>
+      <span class="t">${esc(x.note||'—')}</span>
+      <b class="${x.type==='in'?'in':'out'}">${x.type==='in'?'+':'-'}${money(x.amt)}</b>
+      <button class="x" onclick="delMoney('${x.id}')">×</button></div>`).join(''):'<div class="empty">Wax dhaqdhaqaaq ah lagama qorin bishan.</div>'}
+  </div>`;
+}
+function addMoney(){
+  const amt = parseFloat($('#mAmt').value); if(!amt||amt<=0) return $('#mAmt').focus();
+  db.money.push({id:uid(),type:$('#mType').value,amt,note:$('#mNote').value.trim(),date:sel});
+  save();render();
+}
+function delMoney(id){db.money=db.money.filter(x=>x.id!==id);save();render()}
+
+/* ========= WAXBARASHO ========= */
+function viewWaxbarasho(){
+  const todayI = dayIdx(new Date());
+  return `
+  <div class="top"><h2>📚 Jadwalka Waxbarasho</h2></div>
+  <div class="card"><h3>➕ Ku dar maaddo / casharo</h3>
+    <div class="row">
+      <input id="sSub" placeholder="Maaddada (Xisaab, Ingiriis...)" style="flex:2">
+      <select id="sDay">${DAYS.map((d,i)=>`<option value="${i}" ${i===todayI?'selected':''}>${d}</option>`).join('')}</select>
+      <input id="sFrom" type="time"><input id="sTo" type="time">
+      <input id="sPlace" placeholder="Meesha / macallinka">
+      <button class="btn" onclick="addStudy()">Ku dar</button>
+    </div>
+  </div>
+  ${DAYS.map((dn,i)=>{
+    const l = db.study.filter(s=>s.day===i).sort((a,b)=>(a.from||'').localeCompare(b.from||''));
+    return `<div class="card" ${i===todayI?'style="border-color:var(--primary)"':''}>
+      <h3>${dn} ${i===todayI?'<span class="muted">(maanta)</span>':''}</h3>
+      ${l.length?l.map(s=>`<div class="item ${s.done?'done':''}">
+        <input type="checkbox" ${s.done?'checked':''} onchange="toggleStudy('${s.id}')">
+        <span class="time">${s.from||'—'}${s.to?'-'+s.to:''}</span>
+        <span class="t"><b>${esc(s.sub)}</b> ${s.place?`<span class="muted">· ${esc(s.place)}</span>`:''}</span>
+        <button class="x" onclick="delStudy('${s.id}')">×</button></div>`).join(''):'<div class="muted">Wax lagama qorin.</div>'}
+    </div>`}).join('')}`;
+}
+function addStudy(){
+  const sub = $('#sSub').value.trim(); if(!sub) return $('#sSub').focus();
+  db.study.push({id:uid(),sub,day:+$('#sDay').value,from:$('#sFrom').value,to:$('#sTo').value,place:$('#sPlace').value.trim(),done:false});
+  save();render();
+}
+function toggleStudy(id){const s=db.study.find(x=>x.id===id);s.done=!s.done;save();render()}
+function delStudy(id){db.study=db.study.filter(x=>x.id!==id);save();render()}
+
+/* ========= WAX BARTAY ========= */
+function viewBartay(){
+  const today = db.learn.filter(x=>x.date===sel);
+  const old = db.learn.filter(x=>x.date!==sel).sort((a,b)=>b.date.localeCompare(a.date)).slice(0,15);
+  return `
+  <div class="top"><h2>💡 Wixii Aan Bartay</h2>${dateBar()}</div>
+  <div class="card"><h3>Maxaan bartay ${sel===todayStr()?'maanta':'maalintan'}?</h3>
+    <div class="row"><input id="lText" placeholder="Qor wax cusub oo aad bartay..." onkeydown="if(event.key==='Enter')addLearn()" style="flex:3">
+    <button class="btn" onclick="addLearn()">Ku dar</button></div>
+    ${today.length?today.map(x=>`<div class="item"><span>💡</span><span class="t">${esc(x.text)}</span><button class="x" onclick="delLearn('${x.id}')">×</button></div>`).join(''):'<div class="empty">Wali waxba lama qorin.</div>'}
+  </div>
+  ${old.length?`<div class="card"><h3>Hore u eeg</h3>${old.map(x=>`<div class="old"><small>${x.date}</small>${esc(x.text)}</div>`).join('')}</div>`:''}`;
+}
+function addLearn(){const v=$('#lText').value.trim();if(!v)return;db.learn.push({id:uid(),text:v,date:sel});save();render()}
+function delLearn(id){db.learn=db.learn.filter(x=>x.id!==id);save();render()}
+
+/* ========= QALADAAD ========= */
+function viewQalad(){
+  const today = db.mistakes.filter(x=>x.date===sel);
+  const old = db.mistakes.filter(x=>x.date!==sel).sort((a,b)=>b.date.localeCompare(a.date)).slice(0,15);
+  const show = x=>`<div class="old" style="border-color:var(--red)"><small>${x.date}</small><b>❌ ${esc(x.text)}</b>${x.fix?`<br><span class="muted">✅ Hagaajin: ${esc(x.fix)}</span>`:''}</div>`;
+  return `
+  <div class="top"><h2>⚠️ Qaladaadkayga</h2>${dateBar()}</div>
+  <div class="card"><h3>Qalad aan sameeyay</h3>
+    <div class="row"><input id="eText" placeholder="Qaladka" style="flex:2"><input id="eFix" placeholder="Sidee u hagaajinayaa?" style="flex:2"><button class="btn" onclick="addMistake()">Ku dar</button></div>
+    ${today.length?today.map(x=>`<div class="item"><div class="t"><b>❌ ${esc(x.text)}</b>${x.fix?`<br><span class="muted">✅ ${esc(x.fix)}</span>`:''}</div><button class="x" onclick="delMistake('${x.id}')">×</button></div>`).join(''):'<div class="empty">Wali qalad lama qorin.</div>'}
+  </div>
+  ${old.length?`<div class="card"><h3>Qaladaad hore (ha ku celin)</h3>${old.map(show).join('')}</div>`:''}`;
+}
+function addMistake(){const v=$('#eText').value.trim();if(!v)return;db.mistakes.push({id:uid(),text:v,fix:$('#eFix').value.trim(),date:sel});save();render()}
+function delMistake(id){db.mistakes=db.mistakes.filter(x=>x.id!==id);save();render()}
+
+/* ========= ALLE LA HADAL ========= */
+function viewAlle(){
+  const old = Object.entries(db.dua).filter(([d,t])=>d!==sel&&t.trim()).sort((a,b)=>b[0].localeCompare(a[0])).slice(0,15);
+  return `
+  <div class="top"><h2>🤲 Alle La Hadal</h2>${dateBar()}</div>
+  <div class="card"><h3>Maalintayda, Eebe ugu sheeg</h3>
+    <p class="muted" style="margin-bottom:10px">Waxa dhacay, mahadnaq, dambi dhaaf, iyo bartilmaameedyadaada...</p>
+    <textarea style="min-height:220px" placeholder="Eebow maanta..." oninput="db.dua[sel]=this.value;save()">${esc(db.dua[sel]||'')}</textarea>
+    <div style="margin-top:10px"><button class="btn" onclick="save();toast()">💾 Keydi</button></div>
+  </div>
+  ${old.length?`<div class="card"><h3>Maalmo hore</h3>${old.map(([d,t])=>`<div class="old"><small>${d}</small>${esc(t).replace(/\n/g,'<br>')}</div>`).join('')}</div>`:''}`;
+}
+
+/* ========= RENDER ========= */
+const VIEWS = {maanta:viewMaanta,usbuuc:viewUsbuuc,bil:viewBil,diin:viewDiin,dhaqaale:viewDhaqaale,waxbarasho:viewWaxbarasho,bartay:viewBartay,qalad:viewQalad,alle:viewAlle,ajaj:viewAjaj};
+function render(){
+  const y = scrollY;
+  renderNav();
+  $('#view').innerHTML = VIEWS[page]();
+  scrollTo(0,y);
+}
+/* ========= PIN ========= */
+async function hashPin(p){
+  const s = 'jv|' + p;
+  if(window.crypto && crypto.subtle){
+    const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
+    return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('');
+  }
+  let h = 5381; for(const c of s) h = ((h<<5)+h+c.charCodeAt(0))|0; return 'f'+h;
+}
+let entry = '', lockMode = 'unlock', tmpPin = '', hiddenAt = 0;
+const lockTitle = () => ({unlock:'Geli PIN-kaaga',set1:'Dooro PIN cusub (4 lambar)',set2:'Mar kale geli PIN-ka',remove:'Geli PIN-ka si aad u saarto'})[lockMode];
+function drawLock(title){
+  const L = $('#lock'); L.style.display = 'flex';
+  L.innerHTML = `<div class="lockbox"><div style="font-size:40px">🔒</div><h2>${title||lockTitle()}</h2>
+    <div class="dots">${[0,1,2,3].map(i=>`<i class="${i<entry.length?'on':''}"></i>`).join('')}</div>
+    <div class="pad">${[1,2,3,4,5,6,7,8,9].map(n=>`<button onclick="pk('${n}')">${n}</button>`).join('')}
+      ${lockMode==='unlock'?'<span></span>':'<button onclick="closeLock()">✕</button>'}
+      <button onclick="pk('0')">0</button><button onclick="pk('<')">⌫</button></div>
+    ${user && lockMode==='unlock' ? `<p class="muted" style="margin-top:16px">${esc(user.email)}</p>` : ''}</div>`;
+}
+function closeLock(){ $('#lock').style.display='none'; lockMode='unlock'; entry=''; tmpPin=''; }
+function pk(k){
+  if(k==='<') entry = entry.slice(0,-1); else if(entry.length<4) entry += k;
+  drawLock();
+  if(entry.length===4) setTimeout(submitPin,120);
+}
+async function submitPin(){
+  const e = entry; entry = '';
+  if(lockMode==='unlock'){
+    if(await hashPin(e)===settings.pin){ closeLock(); render(); } else drawLock('PIN waa khalad ❌');
+  } else if(lockMode==='set1'){ tmpPin=e; lockMode='set2'; drawLock();
+  } else if(lockMode==='set2'){
+    if(e===tmpPin){ settings.pin = await hashPin(e); saveSet(); closeLock(); toast('PIN waa la dhigay ✓'); render(); }
+    else { lockMode='set1'; drawLock('Isma laha, mar kale ❌'); }
+  } else if(lockMode==='remove'){
+    if(await hashPin(e)===settings.pin){ settings.pin=null; saveSet(); closeLock(); toast('PIN waa la saaray'); render(); }
+    else drawLock('PIN waa khalad ❌');
+  }
+}
+function startPin(mode){ lockMode=mode; entry=''; tmpPin=''; drawLock(); }
+document.addEventListener('keydown', e=>{
+  if($('#lock').style.display!=='flex') return;
+  if(/^\d$/.test(e.key)) pk(e.key); else if(e.key==='Backspace') pk('<');
+  else if(e.key==='Escape' && lockMode!=='unlock') closeLock();
+});
+// Si otomaatig ah ayuu u xidhmaa marka tab-ka laga tago 1 daqiiqo ka badan
+document.addEventListener('visibilitychange', ()=>{
+  if(document.hidden) hiddenAt = Date.now();
+  else if(settings.pin && hiddenAt && Date.now()-hiddenAt>60000 && $('#lock').style.display!=='flex'){ lockMode='unlock'; entry=''; drawLock(); }
+});
+
+/* ========= OGEYSIIS (Notifications) ========= */
+const notified = new Set(JSON.parse(sessionStorage.getItem('jv_n') || '[]'));
+function beep(){ try{ const a=new (window.AudioContext||window.webkitAudioContext)(), o=a.createOscillator(); o.connect(a.destination); o.frequency.value=880; o.start(); setTimeout(()=>{o.stop();a.close()},350);}catch(e){} }
+function fire(title, body){
+  beep(); toast(title);
+  try{
+    if('Notification' in window && Notification.permission==='granted'){
+      if(navigator.serviceWorker && navigator.serviceWorker.controller)
+        navigator.serviceWorker.ready.then(r=>r.showNotification(title,{body,icon:'icon-192.png',badge:'icon-192.png',vibrate:[200,100,200]}));
+      else new Notification(title,{body});
+    }
+  }catch(e){}
+}
+async function enableNotif(){
+  if(!('Notification' in window)) return toast('Browser-kan ma taageero ogeysiis');
+  const p = await Notification.requestPermission();
+  settings.notif = (p==='granted'); saveSet(); render();
+  if(p==='granted') fire('Ogeysiisku wuu shaqeynayaa ✓','Waan ku xusuusin doonaa shaqooyinkaaga');
+  else toast('Ogeysiiska waa la diiday');
+}
+function checkReminders(){
+  if(!settings.notif) return;
+  const now = Date.now();
+  db.tasks.forEach(t=>{
+    if(t.done || !t.time) return;
+    const at = new Date(`${t.date}T${t.time}`).getTime();
+    if(settings.lead>0 && now>=at-settings.lead*60000 && now<at && !notified.has(t.id+'p')){
+      notified.add(t.id+'p'); fire('⏰ Dhawaan: '+t.text, `Ku dhawaad ${Math.ceil((at-now)/60000)} daqiiqo kadib (${t.time})`);
+    }
+    if(now>=at && now<at+3600000 && !notified.has(t.id+'d')){
+      notified.add(t.id+'d'); fire('🔴 Waqtigii waa gaadhay: '+t.text, 'Ma dhammeysay?');
+    }
+  });
+  sessionStorage.setItem('jv_n', JSON.stringify([...notified]));
+}
+
+/* ========= GMAIL (Google Sign-In) ========= */
+function loadGoogle(){
+  if(!GOOGLE_CLIENT_ID || (window.google && google.accounts)) return;
+  const s = document.createElement('script'); s.src='https://accounts.google.com/gsi/client'; s.async=true;
+  s.onload = ()=>{ google.accounts.id.initialize({client_id:GOOGLE_CLIENT_ID, callback:onGoogle}); drawGBtn(); };
+  document.head.appendChild(s);
+}
+function drawGBtn(){ const e=$('#gbtn'); if(e && window.google && google.accounts && google.accounts.id) google.accounts.id.renderButton(e,{theme:'filled_black',size:'large',shape:'pill'}); }
+function onGoogle(r){
+  try{
+    const b = r.credential.split('.')[1].replace(/-/g,'+').replace(/_/g,'/');
+    const p = JSON.parse(decodeURIComponent(atob(b).split('').map(c=>'%'+c.charCodeAt(0).toString(16).padStart(2,'0')).join('')));
+    const guest = localStorage.getItem(KEY);
+    user = {email:p.email, name:p.name, pic:p.picture};
+    localStorage.setItem(USERKEY, JSON.stringify(user));
+    if(!localStorage.getItem(dbKey()) && guest) localStorage.setItem(dbKey(), guest);
+    db = loadDB(); toast('Soo gelidda waa guulaysatay ✓'); render();
+  }catch(e){ toast('Gmail ma shaqeynin'); }
+}
+function signOut(){
+  user = null; localStorage.removeItem(USERKEY); db = loadDB();
+  if(window.google && google.accounts) google.accounts.id.disableAutoSelect();
+  render();
+}
+
+/* ========= BACKUP ========= */
+function exportData(){
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(db,null,1)],{type:'application/json'}));
+  a.download = 'jadwal-backup-'+todayStr()+'.json'; a.click();
+}
+function importData(inp){
+  const f = inp.files[0]; if(!f) return;
+  const r = new FileReader();
+  r.onload = ()=>{ try{ db = Object.assign(EMPTY(), JSON.parse(r.result)); save(); toast('Xogta waa la soo celiyay ✓'); render(); }catch(e){ toast('Fayl khalad ah'); } };
+  r.readAsText(f);
+}
+
+/* ========= DEJINTA ========= */
+function viewAjaj(){
+  setTimeout(drawGBtn,0);
+  const perm = ('Notification' in window) ? Notification.permission : 'unsupported';
+  return `
+  <div class="top"><h2>⚙️ Dejinta</h2></div>
+  <div class="card"><h3>📧 Akoonka Gmail</h3>
+    ${user ? `<div class="item"><span class="t">${user.pic?`<img class="av" src="${esc(user.pic)}" referrerpolicy="no-referrer">`:''}<b>${esc(user.name||'')}</b><br><span class="muted">${esc(user.email)}</span></span><button class="btn sm sec" onclick="signOut()">Ka bax</button></div>
+      <p class="muted">Xogta akoonkan waa gaar ah (qalabkan ayay ku kaydsan tahay).</p>`
+    : GOOGLE_CLIENT_ID ? `<div id="gbtn"></div><p class="muted" style="margin-top:10px">Xogtaada hadda jirta waxaa loo guuri doonaa akoonkaaga.</p>`
+    : `<p class="muted">Gmail wuxuu u baahan yahay <b>Google Client ID</b>: gal console.cloud.google.com → APIs &amp; Services → Credentials → Create OAuth Client ID (Web) → ku dar URL-ka website-kaaga ee "Authorized JavaScript origins". Kadib koodhka bilowgiisa ku beddel <code>GOOGLE_CLIENT_ID = ''</code>.</p>`}
+  </div>
+  ${isStandalone() ? '' : `<div class="card"><h3>📲 Dag app-ka</h3>
+    ${deferredPrompt ? `<button class="btn" onclick="installApp()">⬇️ Dag Jadwalkayga</button>`
+    : `<p class="muted">Android (Chrome): menu ⋮ → <b>Install app</b> / <b>Add to Home screen</b>.<br>iPhone (Safari): Share ⬆️ → <b>Add to Home Screen</b>.<br>Kombiyuutar: calaamadda dagista ee ku jirta address bar-ka.</p>`}
+  </div>`}
+  <div class="card"><h3>🔒 PIN</h3>
+    <p class="muted" style="margin-bottom:10px">${settings.pin?'PIN waa shaqeynayaa. Appku wuu xidhmayaa marka aad tab-ka ka tagto 1 daqiiqo ka badan.':'Ku xidh appka 4 lambar.'}</p>
+    ${settings.pin ? `<button class="btn sec" onclick="startPin('set1')">Beddel PIN</button> <button class="btn sec" onclick="startPin('remove')">Ka saar PIN</button>` : `<button class="btn" onclick="startPin('set1')">Dhig PIN</button>`}
+  </div>
+  <div class="card"><h3>🔔 Ogeysiis</h3>
+    ${perm==='denied' ? '<p class="muted">Ogeysiiska waa laga xidhay browser-ka. Ka fur Site settings.</p>' : ''}
+    ${settings.notif && perm==='granted' ? `
+      <div class="row"><label class="muted" style="align-self:center">Hore u xusuuso:</label>
+      <select onchange="settings.lead=+this.value;saveSet();toast()">${[0,5,10,15,30,60].map(m=>`<option value="${m}" ${settings.lead===m?'selected':''}>${m?m+' daqiiqo ka hor':'Waqtiga kaliya'}</option>`).join('')}</select></div>
+      <button class="btn sec" onclick="fire('🔔 Tijaabo','Ogeysiisku wuu shaqeynayaa')">Tijaabi</button>
+      <button class="btn sec" onclick="settings.notif=false;saveSet();render()">Damari</button>`
+    : `<button class="btn" onclick="enableNotif()">Daar ogeysiiska</button>`}
+    <p class="muted" style="margin-top:10px">Ogeysiisku wuxuu shaqeeyaa marka app-ku furan yahay (tab-ka dhabarka ku jiro ayaa sidoo kale ku filan).</p>
+  </div>
+  <div class="card"><h3>💾 Kayd (Backup)</h3>
+    <div class="row"><button class="btn sec" onclick="exportData()">⬇️ Soo deji xogta</button>
+    <label class="btn sec" style="text-align:center">⬆️ Soo celi xogta<input type="file" accept=".json" hidden onchange="importData(this)"></label></div>
+  </div>`;
+}
+
+/* ========= DAG APP-KA (PWA) ========= */
+let deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', e=>{ e.preventDefault(); deferredPrompt=e; if(page==='ajaj') render(); });
+window.addEventListener('appinstalled', ()=>{ deferredPrompt=null; toast('App-ka waa la dhisay ✓'); });
+async function installApp(){ if(!deferredPrompt) return; deferredPrompt.prompt(); await deferredPrompt.userChoice; deferredPrompt=null; render(); }
+const isStandalone = () => window.matchMedia('(display-mode: standalone)').matches || navigator.standalone;
+
+function initApp(){
+  if('serviceWorker' in navigator && location.protocol!=='file:') navigator.serviceWorker.register('sw.js').catch(()=>{});
+  loadGoogle();
+  if(settings.pin){ lockMode='unlock'; drawLock(); }
+  render();
+  setInterval(checkReminders, 20000); checkReminders();
+}
+initApp();
+// Dib u hubi shaqooyinka waqtigoodii dhacay daqiiqad walba
+setInterval(()=>{ if(['maanta','usbuuc','bil'].includes(page) && !document.activeElement.matches('input,textarea,select')) render(); },60000);
+</script>
+</body>
+</html>
